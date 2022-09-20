@@ -15,6 +15,23 @@ func NovoRepositorioDeUsuarios(db *sql.DB) *Usuarios {
 	return &Usuarios{db}
 }
 
+
+func (u Usuarios) Atualizar(ID uint64, usuario models.Usuario) error {
+	stmt, err := u.db.Prepare(
+		"update usuarios set nome = ?, nick = ?, email = ? where id = ?",
+	)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err = stmt.Exec(usuario.Nome, usuario.Nick, usuario.Email, ID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u Usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) {
 	nomeOuNick = fmt.Sprintf("%%%s%%", nomeOuNick)
 
