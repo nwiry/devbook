@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"api/responses"
+	"api/src/responses"
 	"api/src/database"
 	"api/src/models"
 	"api/src/repositories"
