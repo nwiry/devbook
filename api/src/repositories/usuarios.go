@@ -111,3 +111,19 @@ func (u Usuarios) Criar(usuario models.Usuario) (uint64, error) {
 
 	return uint64(lastInsert), nil
 }
+
+func (u Usuarios) Deletar(ID uint64) error {
+	stmt, err := u.db.Prepare(
+		"delete from usuarios where id = ?",
+	)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err = stmt.Exec(ID); err != nil {
+		return err
+	}
+
+	return nil
+}
