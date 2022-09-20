@@ -1,6 +1,7 @@
 package models
 
 import (
+	"api/src/security"
 	"errors"
 	"strings"
 	"time"
@@ -49,8 +50,17 @@ func (usuario *Usuario) validar(etapa string) error {
 		return errors.New("o e-mail inserido é inválido")
 	}
 
-	if etapa == "cadastro" && usuario.Senha == "" {
-		return errors.New("a senha é obrigatória e não pode ficar em branco")
+	if etapa == "cadastro" {
+		if usuario.Senha == "" {
+			return errors.New("a senha é obrigatória e não pode ficar em branco")
+		}
+
+		senhaHash, err := security.Hash(usuario.Senha)
+		if err != nil {
+			return err
+		}
+
+		usuario.Senha = string(senhaHash)
 	}
 
 	return nil
